@@ -1,0 +1,28 @@
+# Virtual Environment
+venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+
+# IDE
+.vscode/
+.idea/
+
+# Model Cache
+.insightface/
+
+# Results
+evaluation/results.json
+
+# Test Images
+*.jpg
+*.png
+*.jpeg
+
+# OS
+.DS_Store
+Thumbs.db
