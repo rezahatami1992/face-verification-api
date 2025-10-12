@@ -1,0 +1,64 @@
+{
+    "CALFW": {
+        "dataset": "CALFW",
+        "total_pairs": 6000,
+        "evaluated_pairs": 6000,
+        "failed_pairs": 0,
+        "auc": 0.7442,
+        "optimal_threshold": {
+            "threshold": 62.1,
+            "accuracy": 58.13,
+            "precision": 10.13,
+            "recall": 93.67,
+            "tar": 93.67,
+            "far": 43.74,
+            "tp": 281,
+            "fp": 2493,
+            "tn": 3207,
+            "fn": 19
+        },
+        "default_threshold": {
+            "threshold": 65.0,
+            "accuracy": 58.77,
+            "precision": 10.07,
+            "recall": 91.33,
+            "tar": 91.33,
+            "far": 42.95,
+            "tp": 274,
+            "fp": 2448,
+            "tn": 3252,
+            "fn": 26
+        }
+    },
+    "CPLFW": {
+        "dataset": "CPLFW",
+        "total_pairs": 6000,
+        "evaluated_pairs": 5898,
+        "failed_pairs": 102,
+        "auc": 0.9727,
+        "optimal_threshold": {
+            "threshold": 60.9,
+            "accuracy": 95.73,
+            "precision": 98.7,
+            "recall": 92.69,
+            "tar": 92.69,
+            "far": 1.22,
+            "tp": 2740,
+            "fp": 36,
+            "tn": 2906,
+            "fn": 216
+        },
+        "default_threshold": {
+            "threshold": 65.0,
+            "accuracy": 93.81,
+            "precision": 99.81,
+            "recall": 87.82,
+            "tar": 87.82,
+            "far": 0.17,
+            "tp": 2596,
+            "fp": 5,
+            "tn": 2937,
+            "fn": 360
+        }
+    }
+}
