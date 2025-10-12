@@ -119,6 +119,13 @@ Evaluate model accuracy on academic datasets:
 python evaluation/evaluate_lfw.py
 ```
 
+## 📊 Benchmark Results
+
+| Dataset | Accuracy | AUC | Description |
+|---------|----------|-----|-------------|
+| CPLFW | 95.73% | 0.97 | Celebrity pairs - excellent performance |
+| CALFW | 58.13% | 0.74 | Cross-age - challenging for current model |
+
 ### Supported Datasets
 
 - **LFW** (Labeled Faces in the Wild)
