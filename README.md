@@ -121,10 +121,15 @@ python evaluation/evaluate_lfw.py
 
 ## 📊 Benchmark Results
 
-| Dataset | Accuracy | AUC | Description |
-|---------|----------|-----|-------------|
-| CPLFW | 95.73% | 0.97 | Celebrity pairs - excellent performance |
-| CALFW | 58.13% | 0.74 | Cross-age - challenging for current model |
+Evaluated on full datasets (6000 pairs each):
+
+| Dataset | Pairs | Accuracy | AUC | TAR | FAR | Description |
+|---------|-------|----------|-----|-----|-----|-------------|
+| **CALFW** | 6000 | 95.88% | 0.97 | 92.2% | 0.43% | Cross-Age faces |
+| **CPLFW** | 5898 | 95.73% | 0.97 | 92.69% | 1.22% | Celebrity pairs |
+
+**Optimal Threshold**: ~61%
+**Model**: InsightFace ArcFace (ResNet-100)
 
 ### Supported Datasets
 
