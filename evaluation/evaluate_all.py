@@ -14,7 +14,13 @@ class FaceVerificationEvaluator:
         self.results = {}
         
     def load_pairs(self, pairs_file):
-        """Load pairs from pairs text file"""
+        """Load pairs from pairs text file
+        
+        CALFW/CPLFW format assumption:
+        - First 6000 lines: same person pairs (positive pairs)
+        - Last 6000 lines: different person pairs (negative pairs)
+        Each consecutive 2 lines form a pair.
+        """
         pairs = []
         
         with open(pairs_file, 'r') as f:
@@ -23,34 +29,27 @@ class FaceVerificationEvaluator:
         # Remove empty lines
         lines = [line.strip() for line in lines if line.strip()]
         
-        # Split into positive and negative samples
-        positive_samples = []
-        negative_samples = []
+        # Extract image names
+        images = [line.split()[0] for line in lines]
         
-        for line in lines:
-            parts = line.split()
-            if len(parts) >= 2:
-                img = parts[0]
-                label = int(parts[1])
-                
-                if label == 1:
-                    positive_samples.append(img)
-                else:
-                    negative_samples.append(img)
+        # Split into two halves
+        mid = len(images) // 2
+        positive_images = images[:mid]  # Same person
+        negative_images = images[mid:]  # Different person
         
-        # Create same-person pairs from positive samples (consecutive pairs)
-        for i in range(0, len(positive_samples) - 1, 2):
+        # Create positive pairs (same person)
+        for i in range(0, len(positive_images) - 1, 2):
             pairs.append({
-                'img1': positive_samples[i],
-                'img2': positive_samples[i + 1],
+                'img1': positive_images[i],
+                'img2': positive_images[i + 1],
                 'label': 1  # Same person
             })
         
-        # Create different-person pairs from negative samples (consecutive pairs)
-        for i in range(0, len(negative_samples) - 1, 2):
+        # Create negative pairs (different person)
+        for i in range(0, len(negative_images) - 1, 2):
             pairs.append({
-                'img1': negative_samples[i],
-                'img2': negative_samples[i + 1],
+                'img1': negative_images[i],
+                'img2': negative_images[i + 1],
                 'label': 0  # Different person
             })
         
@@ -95,18 +94,20 @@ class FaceVerificationEvaluator:
         
         # Load pairs
         print("📥 Loading pairs...")
-        pairs = self.load_pairs(pairs_file)
+        all_pairs = self.load_pairs(pairs_file)
         
-        # Apply max_pairs AFTER creating balanced dataset
+        # Apply balanced sampling if max_pairs is set
         if max_pairs:
-            # Take half from same-person, half from different-person
-            same_pairs = [p for p in pairs if p['label'] == 1]
-            diff_pairs = [p for p in pairs if p['label'] == 0]
+            same_pairs = [p for p in all_pairs if p['label'] == 1]
+            diff_pairs = [p for p in all_pairs if p['label'] == 0]
             
             half = max_pairs // 2
             pairs = same_pairs[:half] + diff_pairs[:half]
-        
-        print(f"✅ Loaded {len(pairs)} pairs")
+            
+            print(f"✅ Loaded {len(pairs)} pairs (sampled from {len(all_pairs)})")
+        else:
+            pairs = all_pairs
+            print(f"✅ Loaded {len(pairs)} pairs")
         
         # Count labels
         label_counts = {0: 0, 1: 0}
@@ -303,7 +304,7 @@ def main():
             dataset_name,
             config['pairs_file'],
             config['images_dir'],
-            max_pairs=None  # Full evaluation - 6000 pairs
+            max_pairs=None  # Full evaluation
         )
         
         if results:
