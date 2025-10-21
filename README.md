@@ -42,7 +42,17 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 4. Start Server
+### 4. Download Models
+
+```bash
+python download_models.py
+```
+
+This will download InsightFace models (~100MB) to the `models/` directory in your project.
+
+**Note:** Models will be stored locally in the project for faster startup and offline usage.
+
+### 5. Start Server
 
 ```bash
 python server.py
@@ -118,18 +128,6 @@ Evaluate model accuracy on academic datasets:
 ```bash
 python evaluation/evaluate_lfw.py
 ```
-
-## 📊 Benchmark Results
-
-Evaluated on full datasets (6000 pairs each):
-
-| Dataset | Pairs | Accuracy | AUC | TAR | FAR | Description |
-|---------|-------|----------|-----|-----|-----|-------------|
-| **CALFW** | 6000 | 95.88% | 0.97 | 92.2% | 0.43% | Cross-Age faces |
-| **CPLFW** | 5898 | 95.73% | 0.97 | 92.69% | 1.22% | Celebrity pairs |
-
-**Optimal Threshold**: ~61%
-**Model**: InsightFace ArcFace (ResNet-100)
 
 ### Supported Datasets
 

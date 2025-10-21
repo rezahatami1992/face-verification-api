@@ -26,3 +26,7 @@ evaluation/results.json
 # OS
 .DS_Store
 Thumbs.db
+
+# Models (optional - remove if you want to commit models)
+models/
+*.onnx

@@ -26,7 +26,21 @@ def load_face_model():
     """Load InsightFace model on startup"""
     global face_model
     try:
-        face_model = FaceAnalysis(providers=['CPUExecutionProvider'])
+        # Check for local models directory
+        models_dir = Path(__file__).parent / "models"
+        
+        if models_dir.exists():
+            print(f"📁 Loading models from: {models_dir.absolute()}")
+            face_model = FaceAnalysis(
+                name='buffalo_l',
+                root=str(models_dir),
+                providers=['CPUExecutionProvider']
+            )
+        else:
+            print("⚠️  Local models not found. Downloading to default location...")
+            print("💡 Tip: Run 'python download_models.py' to download models locally")
+            face_model = FaceAnalysis(providers=['CPUExecutionProvider'])
+        
         face_model.prepare(ctx_id=0, det_size=(640, 640))
         print("✅ InsightFace model loaded successfully")
     except Exception as e:
