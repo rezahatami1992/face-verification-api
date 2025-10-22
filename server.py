@@ -1,5 +1,6 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from contextlib import asynccontextmanager
 import cv2
 import numpy as np
 from PIL import Image
@@ -7,8 +8,21 @@ import io
 import uvicorn
 import insightface
 from insightface.app import FaceAnalysis
+from pathlib import Path
 
-app = FastAPI(title="Face Verification API")
+# Initialize InsightFace model (global variable)
+face_model = None
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Lifespan context manager for startup/shutdown events"""
+    # Startup: Load model
+    load_face_model()
+    yield
+    # Shutdown: cleanup if needed
+    pass
+
+app = FastAPI(title="Face Verification API", lifespan=lifespan)
 
 # Add CORS middleware
 app.add_middleware(
@@ -18,9 +32,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-# Initialize InsightFace model (global variable)
-face_model = None
 
 def load_face_model():
     """Load InsightFace model on startup"""
@@ -46,11 +57,6 @@ def load_face_model():
     except Exception as e:
         print(f"❌ Error loading model: {e}")
         face_model = None
-
-@app.on_event("startup")
-async def startup_event():
-    """Load model when server starts"""
-    load_face_model()
 
 def preprocess_image(image_bytes):
     """Convert uploaded image to OpenCV format"""
